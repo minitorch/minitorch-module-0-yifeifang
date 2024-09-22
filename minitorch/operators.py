@@ -3,7 +3,7 @@
 import math
 
 # ## Task 0.1
-from typing import Callable, Iterable
+from typing import Callable, Iterable, Any, List
 
 #
 # Implementation of a prelude of elementary functions.
@@ -251,5 +251,95 @@ def relu_back(x: float, d: float) -> float:
 # - sum: sum lists
 # - prod: take the product of lists
 
+def map(fn: Callable[[Any], Any], lst: Iterable[Any]) -> List[Any]:
+    """
+    Apply a function to each element in an iterable.
 
-# TODO: Implement for Task 0.3.
+    Args:
+        fn (Callable[[Any], Any]): The function to apply to each element.
+        lst (Iterable[Any]): The input iterable.
+
+    Returns:
+        List[Any]: A new list with the function applied to each element.
+    """
+    return [fn(x) for x in lst]
+
+def zipWith(fn: Callable[[Any, Any], Any], lst1: Iterable[Any], lst2: Iterable[Any]) -> List[Any]:
+    """
+    Combine elements from two iterables using a given function.
+
+    Args:
+        fn (Callable[[Any, Any], Any]): The function to combine elements.
+        lst1 (Iterable[Any]): The first input iterable.
+        lst2 (Iterable[Any]): The second input iterable.
+
+    Returns:
+        List[Any]: A new list with combined elements.
+    """
+    return [fn(x, y) for x, y in zip(lst1, lst2)]
+
+def reduce(fn: Callable[[Any, Any], Any], lst: Iterable[Any], initial: Any) -> Any:
+    """
+    Reduce an iterable to a single value using a given function.
+
+    Args:
+        fn (Callable[[Any, Any], Any]): The function to apply cumulatively.
+        lst (Iterable[Any]): The input iterable.
+        initial (Any): The initial value for the reduction.
+
+    Returns:
+        Any: The final reduced value.
+    """
+    result = initial
+    for x in lst:
+        result = fn(result, x)
+    return result
+
+def negList(lst: Iterable[float]) -> List[float]:
+    """
+    Negate all elements in a list.
+
+    Args:
+        lst (Iterable[float]): The input list of numbers.
+
+    Returns:
+        List[float]: A new list with all elements negated.
+    """
+    return map(neg, lst)
+
+def addLists(lst1: Iterable[float], lst2: Iterable[float]) -> List[float]:
+    """
+    Add corresponding elements from two lists.
+
+    Args:
+        lst1 (Iterable[float]): The first input list of numbers.
+        lst2 (Iterable[float]): The second input list of numbers.
+
+    Returns:
+        List[float]: A new list with sums of corresponding elements.
+    """
+    return zipWith(add, lst1, lst2)
+
+def sum(lst: Iterable[float]) -> float:
+    """
+    Calculate the sum of all elements in a list.
+
+    Args:
+        lst (Iterable[float]): The input list of numbers.
+
+    Returns:
+        float: The sum of all elements in the list.
+    """
+    return reduce(add, lst, 0.0)
+
+def prod(lst: Iterable[float]) -> float:
+    """
+    Calculate the product of all elements in a list.
+
+    Args:
+        lst (Iterable[float]): The input list of numbers.
+
+    Returns:
+        float: The product of all elements in the list.
+    """
+    return reduce(mul, lst, 1.0)
