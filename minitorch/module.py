@@ -41,7 +41,7 @@ class Module:
         for module in self.modules():
             module.eval()
 
-    def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
+    def named_parameters(self, name = "") -> Sequence[Tuple[str, Parameter]]:
         """Collect all the parameters of this module and its descendents.
 
         Returns
@@ -49,8 +49,12 @@ class Module:
             The name and `Parameter` of each ancestor parameter.
 
         """
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        result = []
+        for paramName in self._parameters:
+            result.append((name + paramName, self._parameters[paramName]))
+        for moduleName in self._modules:
+            result += self._modules[moduleName].named_parameters(name + moduleName + ".")
+        return result
 
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
@@ -58,7 +62,7 @@ class Module:
         for name in self._parameters:
             result.append(self._parameters[name])
         for module in self.modules():
-            result.append(module.parameters())
+            result += module.parameters()
         return result
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
